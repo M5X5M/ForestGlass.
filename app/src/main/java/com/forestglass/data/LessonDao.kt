@@ -10,6 +10,9 @@ interface LessonDao {
     @Query("SELECT * FROM lessons ORDER BY chapter, title")
     suspend fun getAllLessons(): List<Lesson>
 
+    @Query("SELECT * FROM lessons WHERE chapter = :chapter ORDER BY title")
+    suspend fun getLessonsByChapter(chapter: Int): List<Lesson>
+
     @Query("SELECT * FROM physics_laws")
     suspend fun getAllLaws(): List<PhysicsLaw>
 
