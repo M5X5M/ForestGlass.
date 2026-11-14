@@ -18,7 +18,11 @@ import com.forestglass.kiosk.EmergencyPinManager
 fun EmergencyPinScreen(onSuccess: () -> Unit, onCancel: () -> Unit) {
     var pin by remember { mutableStateOf("") }
     var error by remember { mutableStateOf(false) }
-    val manager = remember { EmergencyPinManager(LocalContext.current) }
+    
+    // التعديل هنا: فصلنا الـ Context عن الـ remember
+    val context = LocalContext.current
+    val manager = remember { EmergencyPinManager(context) }
+
     Column(
         modifier = Modifier.fillMaxSize().background(Color.Black),
         horizontalAlignment = Alignment.CenterHorizontally,
