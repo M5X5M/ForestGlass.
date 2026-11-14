@@ -1,0 +1,2 @@
+-keep class com.forestglass.data.** { *; }
+-keep class com.pierfrancescosoffritti.** { *; }

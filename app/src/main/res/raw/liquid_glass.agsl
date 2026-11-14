@@ -1,0 +1,26 @@
+uniform shader content;
+uniform float2 size;
+uniform float blurRadius;
+uniform float refraction;
+uniform float lightAngle;
+
+half4 main(float2 coord) {
+    float2 uv = coord / size;
+    float2 offset = float2(
+        sin(uv.y * 3.14159 + lightAngle) * refraction * 0.01,
+        cos(uv.x * 3.14159 + lightAngle) * refraction * 0.01
+    );
+    half4 blurred = half4(0.0);
+    float total = 0.0;
+    for (float x = -2.0; x <= 2.0; x += 1.0) {
+        for (float y = -2.0; y <= 2.0; y += 1.0) {
+            float weight = 1.0 / (1.0 + length(float2(x, y)));
+            blurred += content.eval(coord + float2(x, y) * blurRadius * 2.0) * weight;
+            total += weight;
+        }
+    }
+    blurred /= total;
+    half4 glassTint = half4(1.0, 1.0, 1.0, 0.08);
+    float highlight = smoothstep(0.4, 0.6, sin(lightAngle) * 0.5 + 0.5) * 0.15;
+    return mix(blurred, glassTint, 0.15) + half4(highlight, highlight, highlight, 0.0);
+}
